@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cluster import KMeans
 
-def Case1(abd_amp, abd_peak, x, abd_den):
+
+def Case1(abd_amp, abd_peak, x, abd_den, ns):
     kmeans = KMeans(n_clusters=3)
     kmeans.fit(abd_amp.reshape(-1, 1))
     abd_clus = kmeans.labels_
@@ -122,7 +123,7 @@ def Case3(abd_amp, abd_peak, x, abd_den, ns):
     plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
 
 def Case4(abd_amp, abd_peak, x, abd_den, ns):
-    abd_amp=abd_amp*ns
+    abd_amp = abd_amp*ns
     kmeans = KMeans(n_clusters=3)
     kmeans.fit(abd_amp.reshape(-1, 1))
     abd_clus = kmeans.labels_
