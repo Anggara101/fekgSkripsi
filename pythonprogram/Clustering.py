@@ -31,10 +31,11 @@ def Case1(abd_amp, abd_peak, x, abd_den, ns):
         abd_peak2I[n] = np.argwhere(abd_amp == abd_clus2[n])
         abd_peak2[n] = abd_peak[abd_peak2I[n]]
         abd_peak2I[n] = np.argwhere(abd_den == abd_peak2[n])
-    plt.figure()
-    plt.plot(x, abd_den, "k")
-    plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
-    plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    # plt.figure()
+    # plt.plot(x, abd_den, "k")
+    # plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
+    # plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    return abd_peak1I, abd_peak2I
 
 
 def Case2(abd_amp, abd_peak, x, abd_den, ns):
@@ -83,10 +84,11 @@ def Case2(abd_amp, abd_peak, x, abd_den, ns):
         abd_peak2I[n] = np.argwhere(abd_amp == abd_clus2[n])
         abd_peak2[n] = abd_peak[abd_peak2I[n]]
         abd_peak2I[n] = np.argwhere(abd_den == abd_peak2[n])
-    plt.figure()
-    plt.plot(x, abd_den, "k")
-    plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
-    plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    # plt.figure()
+    # plt.plot(x, abd_den, "k")
+    # plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
+    # plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    return abd_peak1I, abd_peak2I
 
 def Case3(abd_amp, abd_peak, x, abd_den, ns):
     abd_amp=abd_amp*ns
@@ -117,10 +119,11 @@ def Case3(abd_amp, abd_peak, x, abd_den, ns):
         abd_peak2I[n] = np.argwhere(abd_amp == abd_clus2[n])
         abd_peak2[n] = abd_peak[abd_peak2I[n]]
         abd_peak2I[n] = np.argwhere(abd_den == abd_peak2[n])
-    plt.figure()
-    plt.plot(x, abd_den, "k")
-    plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
-    plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    # plt.figure()
+    # plt.plot(x, abd_den, "k")
+    # plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
+    # plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    return abd_peak1I, abd_peak2I
 
 def Case4(abd_amp, abd_peak, x, abd_den, ns):
     abd_amp = abd_amp*ns
@@ -169,7 +172,8 @@ def Case4(abd_amp, abd_peak, x, abd_den, ns):
         abd_peak2I[n] = np.argwhere(abd_amp == abd_clus2[n])
         abd_peak2[n] = abd_peak[abd_peak2I[n]]
         abd_peak2I[n] = np.argwhere(abd_den == abd_peak2[n])
-    plt.figure()
-    plt.plot(x, abd_den, "k")
-    plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
-    plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    # plt.figure()
+    # plt.plot(x, abd_den, "k")
+    # plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
+    # plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
+    return abd_peak1I, abd_peak2I
