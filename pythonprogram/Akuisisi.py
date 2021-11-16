@@ -12,7 +12,9 @@ abd_den = preprocesing.pp(abd)
 datalogging.savecsv(x, abd_den, 'data1.csv')
 # peak and amplitude detection
 abd_amp, abd_peak, ns = preprocesing.peakvalley(abd_den)
+
 # Clustering
-Clustering.Case1(abd_amp, abd_peak, x, abd_den, ns)
+abd_peak1i, abd_peak2i = Clustering.Case4(abd_amp, abd_peak, x, abd_den, ns)
+datalogging.plotresult(x, abd_den, abd_peak1i, abd_peak2i)
 
 plt.show()
