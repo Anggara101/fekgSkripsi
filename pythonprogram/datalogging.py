@@ -3,8 +3,52 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-
-
+import time
+import Adafruit_ADS1x15
+from drawnow import *
+    
+def readsensor(filename):
+    adc = Adafruit_ADS1x15.ADS1115()
+    GAIN = 1
+    start = time.time()
+    f = open(filename, 'w', newline='')
+    writer = csv.writer(f)
+    x,y = [],[]
+    plt.figure()
+    def makegraph():
+        plt.plot(x, y)
+        
+    while True:
+        value = adc.read_adc(0, gain=GAIN)
+        t = np.round((time.time() - start), decimals=4)
+        print(t, value)
+        xy = [t, value]
+        writer.writerow(xy)
+        x.append(t)
+        y.append(value)
+        drawnow(makegraph)
+        time.sleep(0.01)
+        if (time.time() - start) >= 20.0:
+            break
+    f.close()
+    # return x, y
+    
+    
+def plotsensor():
+    fig = plt.figure()
+    x, y = [], []
+    def animate(i):
+        f = open('sensordata.csv', 'r')
+        plots = csv.reader(f)
+        for row in plots:
+            x.append(float(row[0]))
+            y.append(float(row[1]))
+        f.close()
+        plt.plot(np.array(x), np.array(y))
+    anim = animation.FuncAnimation(fig, animate, interval=500)
+    plt.show()
+        
+    
 def matfile(filename, abdname):
     mat = scipy.io.loadmat(filename)
     # Load Abdomen
@@ -97,3 +141,4 @@ def plotresult(x, y, peak1, peak2):
     # call the animator
     anim = animation.FuncAnimation(fig, animate, interval=1, frames=frame, repeat=False)
     plt.show()
+
