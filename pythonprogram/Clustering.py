@@ -14,6 +14,7 @@ def Case1(abd_amp, abd_peak, x, abd_den, ns):
     abd_clus1I = abd_ampI[abd_clus == centI[2]]
     abd_clus2I = abd_ampI[abd_clus == centI[1]]
     abd_clus3I = abd_ampI[abd_clus == centI[0]]
+    plt.figure()
     plt.plot(abd_ampI[abd_clus1I], abd_amp[abd_clus1I], "b*")
     plt.plot(abd_ampI[abd_clus2I], abd_amp[abd_clus2I], "r*")
     plt.plot(abd_ampI[abd_clus3I], abd_amp[abd_clus3I], "y*")
@@ -51,6 +52,7 @@ def Case2(abd_amp, abd_peak, x, abd_den, ns):
     abd_clus3I = abd_ampI[abd_clus == centI[0]]
     abd_clus23I = np.concatenate((abd_clus2I, abd_clus3I))
     abd_clus23I = np.sort(abd_clus23I)
+    plt.figure()
     plt.plot(abd_ampI[abd_clus1I], abd_amp[abd_clus1I], "b*")
     plt.plot(abd_ampI[abd_clus23I], abd_amp[abd_clus23I], "r*")
     abd_clus23 = abd_amp[abd_clus23I]
@@ -102,6 +104,7 @@ def Case3(abd_amp, abd_peak, x, abd_den, ns):
     abd_clus1I = abd_ampI[abd_clus == centI[2]]
     abd_clus2I = abd_ampI[abd_clus == centI[1]]
     abd_clus3I = abd_ampI[abd_clus == centI[0]]
+    plt.figure()
     plt.plot(abd_ampI[abd_clus1I], abd_amp[abd_clus1I], "b*")
     plt.plot(abd_ampI[abd_clus2I], abd_amp[abd_clus2I], "r*")
     plt.plot(abd_ampI[abd_clus3I], abd_amp[abd_clus3I], "y*")
@@ -139,6 +142,7 @@ def Case4(abd_amp, abd_peak, x, abd_den, ns):
     abd_clus3I = abd_ampI[abd_clus == centI[0]]
     abd_clus23I = np.concatenate((abd_clus2I, abd_clus3I))
     abd_clus23I = np.sort(abd_clus23I)
+    plt.figure()
     plt.plot(abd_ampI[abd_clus1I], abd_amp[abd_clus1I], "b*")
     plt.plot(abd_ampI[abd_clus23I], abd_amp[abd_clus23I], "r*")
     abd_clus23 = abd_amp[abd_clus23I]
@@ -177,3 +181,4 @@ def Case4(abd_amp, abd_peak, x, abd_den, ns):
     # plt.plot(x[abd_peak1I], abd_den[abd_peak1I], "b*")
     # plt.plot(x[abd_peak2I], abd_den[abd_peak2I], "r*")
     return abd_peak1I, abd_peak2I
+
