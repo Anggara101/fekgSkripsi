@@ -107,23 +107,25 @@ def plotgraph(x, y):
     anim = animation.FuncAnimation(fig, animate, interval=1, frames=frame, repeat=False)
     plt.show()
 
+    
 def plotresult(x, y, peak1, peak2):
     # lists to store x and y axis points
     xdata, ydata, peak1data, peak2data = [], [], [], []
-    fig = plt.figure()
+    plt.figure()
 
+    def makegraph():
+        plt.plot(xarray.T, yarray.T, 'k')
+        plt.plot(x[peak1i], y[peak1i], 'b*')
+        plt.plot(x[peak2i], y[peak2i], 'r*')
     # animation function
-    def animate(i):
-        # appending new points to x, y axes points list
-        n1 = i * 100
-        n2 = (i + 1) * 100 + 1
+    m = (len(x) + 1) / 100
+    for i in range(1, int(m)):
+        n1 = i * 100 - 1
+        n2 = (i + 1) * 100
         xdata.append(x[n1:n2])
         ydata.append(y[n1:n2])
         xarray = np.array(xdata)
         yarray = np.array(ydata)
-        plt.cla()
-        plt.plot(xarray.T, yarray.T, 'k')
-
         for l1 in range(len(peak1)):
             if n2 >= peak1[l1]:
                 peak1data.append(peak1[l1])
@@ -132,13 +134,5 @@ def plotresult(x, y, peak1, peak2):
                 peak2data.append(peak2[l2])
         peak1i = list(dict.fromkeys(peak1data))
         peak2i = list(dict.fromkeys(peak2data))
-        plt.plot(x[peak1i], y[peak1i], 'b*')
-        plt.plot(x[peak2i], y[peak2i], 'r*')
-
-
-    m = (len(x)-1)/100-1
-    frame = np.arange(int(m))
-    # call the animator
-    anim = animation.FuncAnimation(fig, animate, interval=1, frames=frame, repeat=False)
-    plt.show()
-
+        drawnow(makegraph)
+        time.sleep(0.1)
