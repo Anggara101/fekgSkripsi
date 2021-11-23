@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 
-def case0(abd_amp, _):
+def case0(abd_amp):
     plt.figure()
     plt.plot(abd_amp, "*")
 
