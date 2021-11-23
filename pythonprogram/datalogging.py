@@ -1,54 +1,33 @@
 import scipy.io
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+from drawnow import *
 import time
 import Adafruit_ADS1x15
-from drawnow import *
-    
-def readsensor(filename):
+
+
+def readsensor(filename, endtime):
     adc = Adafruit_ADS1x15.ADS1115()
-    GAIN = 1
+    gain = 1
     start = time.time()
-    f = open(filename, 'w', newline='')
-    writer = csv.writer(f)
-    x,y = [],[]
-    plt.figure()
-    def makegraph():
-        plt.plot(x, y)
-        
+    x, y = [], []
     while True:
-        value = adc.read_adc(0, gain=GAIN)
-        t = np.round((time.time() - start), decimals=4)
+        f = open(filename, 'w', newline='')
+        writer = csv.writer(f)
+        value = adc.read_adc(0, gain=gain)
+        t = np.round((time.time() - start), decimals=3)
         print(t, value)
-        xy = [t, value]
-        writer.writerow(xy)
         x.append(t)
         y.append(value)
-        drawnow(makegraph)
-        time.sleep(0.01)
-        if (time.time() - start) >= 20.0:
-            break
-    f.close()
-    # return x, y
-    
-    
-def plotsensor():
-    fig = plt.figure()
-    x, y = [], []
-    def animate(i):
-        f = open('sensordata.csv', 'r')
-        plots = csv.reader(f)
-        for row in plots:
-            x.append(float(row[0]))
-            y.append(float(row[1]))
+        for i in range(len(x)):
+            writer.writerow([x[i], y[i]])
         f.close()
-        plt.plot(np.array(x), np.array(y))
-    anim = animation.FuncAnimation(fig, animate, interval=500)
-    plt.show()
-        
-    
+        time.sleep(0.01)
+        if (time.time() - start) >= endtime:
+            break
+    return x, y
+
+
 def matfile(filename, abdname):
     mat = scipy.io.loadmat(filename)
     # Load Abdomen
@@ -69,8 +48,6 @@ def loadcsv(filename):
         x.append(float(row[0]))
         y.append(float(row[1]))
     f.close()
-    x = np.array(x)
-    y = np.array(y)
     # plt.figure()
     # plt.plot(x, y)
     return x, y
@@ -85,30 +62,39 @@ def savecsv(x, y, filename):
 
 
 def plotgraph(x, y):
+    plt.plot(x, y)
+
+
+def plotgraphanimate(x, y):
     # lists to store x and y axis points
     xdata, ydata = [], []
-    fig = plt.figure()
+    plt.figure()
 
-    # animation function
-    def animate(i):
-        # appending new points to x, y axes points list
-        n1 = i * 100
-        n2 = (i + 1) * 100 + 1
-        xdata.append(x[n1:n2])
-        ydata.append(y[n1:n2])
-        xarray = np.array(xdata)
-        yarray = np.array(ydata)
-        plt.cla()
+    def makegraph():
         plt.plot(xarray.T, yarray.T, 'b')
 
-    m = (len(x)-1)/100-1
-    frame = np.arange(int(m))
-    # call the animator
-    anim = animation.FuncAnimation(fig, animate, interval=1, frames=frame, repeat=False)
-    plt.show()
+    m = (len(x) + 1) / 100
+    # animation function
+    for i in range(1, int(m)):
+        n1 = i * 100 - 1
+        n2 = (i + 1) * 100
+        xdata.append(x[n1:n2])
+        ydata.append(y[n1:n2])
+        # appending new points to x, y axes points list
+        xarray = np.array(xdata)
+        yarray = np.array(ydata)
+        drawnow(makegraph)
+        time.sleep(0.1)
 
-    
+
 def plotresult(x, y, peak1, peak2):
+    plt.figure()
+    plt.plot(x, y, "k")
+    plt.plot(x[peak1], y[peak1], "b*")
+    plt.plot(x[peak2], y[peak2], "r*")
+
+
+def plotresultanimate(x, y, peak1, peak2):
     # lists to store x and y axis points
     xdata, ydata, peak1data, peak2data = [], [], [], []
     plt.figure()
