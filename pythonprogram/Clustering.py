@@ -3,6 +3,11 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 
+def case0(abd_amp, _):
+    plt.figure()
+    plt.plot(abd_amp, "*")
+
+
 def case1(abd_amp, abd_peak, abd_den, _):
     kmeans = KMeans(n_clusters=3)
     kmeans.fit(abd_amp.reshape(-1, 1))
@@ -76,7 +81,7 @@ def case2(abd_amp, abd_peak, abd_den, ns):
         abd_peak1i[n] = np.argwhere(abd_amp == abd_clus1[n])
         abd_peak1[n] = abd_peak[abd_peak1i[n]]
         abd_peak1i[n] = np.argwhere(abd_den == abd_peak1[n])
-    abd_clus23n = abd_clus23*ns[abd_clus23i]
+    abd_clus23n = abd_clus23 * ns[abd_clus23i]
     abd_clus2 = abd_clus23n[abd_2clus23 == cent2i[1]]
     abd_amp = np.round(abd_amp, decimals=8)
     abd_clus2 = np.round(abd_clus2, decimals=8)
@@ -94,7 +99,7 @@ def case2(abd_amp, abd_peak, abd_den, ns):
 
 
 def case3(abd_amp, abd_peak, abd_den, ns):
-    abd_amp = abd_amp*ns
+    abd_amp = abd_amp * ns
     kmeans = KMeans(n_clusters=3)
     kmeans.fit(abd_amp.reshape(-1, 1))
     abd_clus = kmeans.labels_
@@ -131,7 +136,7 @@ def case3(abd_amp, abd_peak, abd_den, ns):
 
 
 def case4(abd_amp, abd_peak, abd_den, ns):
-    abd_amp = abd_amp*ns
+    abd_amp = abd_amp * ns
     kmeans = KMeans(n_clusters=3)
     kmeans.fit(abd_amp.reshape(-1, 1))
     abd_clus = kmeans.labels_
