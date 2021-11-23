@@ -28,6 +28,29 @@ def readsensor(filename, endtime):
     return x, y
 
 
+def plotsensor(filename, endtime):
+    start = time.time()
+
+    def makegraph():
+        plt.plot(x, y)
+
+    while True:
+        time.sleep(2)
+        x = []
+        y = []
+        f = open(filename, 'r')
+        plots = csv.reader(f)
+        for row in plots:
+            x.append(float(row[0]))
+            y.append(float(row[1]))
+        #         print(x)
+        drawnow(makegraph)
+        if (time.time() - start) >= endtime:
+            drawnow(makegraph, show_once=True)
+            break
+        f.close()
+
+
 def matfile(filename, abdname):
     mat = scipy.io.loadmat(filename)
     # Load Abdomen
