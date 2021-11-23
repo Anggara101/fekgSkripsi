@@ -6,12 +6,15 @@ import scipy.signal as sci
 
 def pp(abd):
     # wavelet decomposition
-    coeffs = pywt.wavedec(abd, 'sym4', level=8)
+    lvl = 5
+    coeffs = pywt.wavedec(abd, 'sym4', level=lvl)
     # cA8,cD8,cD7,cD6,cD5,cD4,cD3,cD2,cD1=coeffs
     # remove baseline wander
-    for i in range(1, 9):  # Remove detail coefficient
+    for i in range(1, lvl+1):  # Remove detail coefficient
         coeffs[i] = np.zeros_like(coeffs[i])
     a = pywt.waverec(coeffs, 'sym4')
+    if len(a) > len(abd):
+        a = np.delete(a, -1)
     abd_nobw = abd - a
     # remove noise
     abd_den = denoise_wavelet(abd_nobw, wavelet='sym4', mode='hard', wavelet_levels=4, rescale_sigma='True')
