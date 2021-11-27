@@ -1,54 +1,38 @@
 import scipy.io
 import csv
-import numpy as np
-from drawnow import *
-import time
-import Adafruit_ADS1x15
+import sqlite3
+import matplotlib.pyplot as plt
+
+# conn = sqlite3.connect('fekgdata.db')
+# c = conn.cursor()
+# #     c.execute("""CREATE TABLE fekg(
+# #                     sqlid INTEGER,
+# #                     time REAL,
+# #                     raw_abdomen REAL)""")
+# #     c.execute("INSERT INTO fekg VALUES (:sqlid, :time, :raw_abdomen)",{'sqlid': int(start), 
+#               'time': t, 'raw_abdomen': value})
+# #     c.execute("SELECT time, raw_abdomen FROM fekg WHERE sqlid=:sqlid", {'sqlid': sqlid})
+# print(c.fetchall())
+# conn.commit()
+# conn.close()
 
 
-def readsensor(filename, endtime):
-    adc = Adafruit_ADS1x15.ADS1115()
-    gain = 1
-    start = time.time()
-    x, y = [], []
-    while True:
-        f = open(filename, 'w', newline='')
-        writer = csv.writer(f)
-        value = adc.read_adc(0, gain=gain)
-        t = np.round((time.time() - start), decimals=3)
-        print(t, value)
-        x.append(t)
-        y.append(value)
-        for i in range(len(x)):
-            writer.writerow([x[i], y[i]])
-        f.close()
-        time.sleep(0.01)
-        if (time.time() - start) >= endtime:
-            break
-    return x, y
-
-
-def plotsensor(filename, endtime):
-    start = time.time()
-
-    def makegraph():
-        plt.plot(x, y)
-
-    while True:
-        time.sleep(2)
-        x = []
-        y = []
-        f = open(filename, 'r')
-        plots = csv.reader(f)
-        for row in plots:
-            x.append(float(row[0]))
-            y.append(float(row[1]))
-        #         print(x)
-        drawnow(makegraph)
-        if (time.time() - start) >= endtime:
-            drawnow(makegraph, show_once=True)
-            break
-        f.close()
+def readdatabase(sqlid):
+    conn = sqlite3.connect('fekgdata.db')
+    c = conn.cursor()
+    c.execute("SELECT time, raw_abdomen FROM fekg WHERE sqlid=:sqlid", {'sqlid': sqlid})
+    conn.commit()
+    result = c.fetchall()
+    conn.close()
+    unzipped_result = list(zip(*result))
+    x = unzipped_result[0]
+    x = list(x)
+    y = unzipped_result[1]
+    y = list(y)
+    print(x, y)
+    plt.figure()
+    plt.plot(x, y)
+    plt.show()
 
 
 def matfile(filename, abdname):
@@ -84,64 +68,5 @@ def savecsv(x, y, filename):
     f.close()
 
 
-def plotgraph(x, y):
-    plt.plot(x, y)
-
-
-def plotgraphanimate(x, y):
-    # lists to store x and y axis points
-    xdata, ydata = [], []
-    plt.figure()
-
-    def makegraph():
-        plt.plot(xarray.T, yarray.T, 'b')
-
-    m = (len(x) + 1) / 100
-    # animation function
-    for i in range(1, int(m)):
-        n1 = i * 100 - 1
-        n2 = (i + 1) * 100
-        xdata.append(x[n1:n2])
-        ydata.append(y[n1:n2])
-        # appending new points to x, y axes points list
-        xarray = np.array(xdata)
-        yarray = np.array(ydata)
-        drawnow(makegraph)
-        time.sleep(0.1)
-
-
-def plotresult(x, y, peak1, peak2):
-    plt.figure()
-    plt.plot(x, y, "k")
-    plt.plot(x[peak1], y[peak1], "b*")
-    plt.plot(x[peak2], y[peak2], "r*")
-
-
-def plotresultanimate(x, y, peak1, peak2):
-    # lists to store x and y axis points
-    xdata, ydata, peak1data, peak2data = [], [], [], []
-    plt.figure()
-
-    def makegraph():
-        plt.plot(xarray.T, yarray.T, 'k')
-        plt.plot(x[peak1i], y[peak1i], 'b*')
-        plt.plot(x[peak2i], y[peak2i], 'r*')
-    # animation function
-    m = (len(x) + 1) / 100
-    for i in range(1, int(m)):
-        n1 = i * 100 - 1
-        n2 = (i + 1) * 100
-        xdata.append(x[n1:n2])
-        ydata.append(y[n1:n2])
-        xarray = np.array(xdata)
-        yarray = np.array(ydata)
-        for l1 in range(len(peak1)):
-            if n2 >= peak1[l1]:
-                peak1data.append(peak1[l1])
-        for l2 in range(len(peak2)):
-            if n2 >= peak2[l2]:
-                peak2data.append(peak2[l2])
-        peak1i = list(dict.fromkeys(peak1data))
-        peak2i = list(dict.fromkeys(peak2data))
-        drawnow(makegraph)
-        time.sleep(0.1)
+if __name__ == '__main__':
+    pass
