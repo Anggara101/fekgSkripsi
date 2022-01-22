@@ -1,0 +1,150 @@
+<Backdrop>
+    MDBackdrop:
+        id: backdrop
+        left_action_items: [['menu', lambda x: self.open()]]
+        title: "FEKG Monitor"
+        radius_left: "10dp"
+        radius_right: "10dp"
+        header_text: "Menu:"
+
+        MDBackdropBackLayer:
+            MDBoxLayout:
+                size_hint: 1, 0.9
+                pos_hint: {"top": 1}
+                orientation: 'vertical'
+                padding: 10, 10, 10, 10
+
+                MDCard:
+                    size_hint: 1, 1
+                    padding: 10, 10, 10, 10
+                    #elevation: 8
+                    ScrollView:
+                        id: view
+                        do_scroll_x: True
+                        do_scroll_y: False
+                        orientation: 'vertical'
+                        size_hint: 0.77, 1
+                        valign: 'middle'
+                        bar_width: 4
+
+                        MDBoxLayout:
+                            id: view2
+                            orientation: 'vertical'
+                            size_hint: None, 1
+                            width: view.width*root.zoom*root.n
+
+                            MDBoxLayout:
+                                id: modulation
+                                size_hint_x: 1
+                                size_hint_y: 1
+
+                                Graph:
+                                    id: graph
+                                    label_options: {'color': app.theme_cls.opposite_bg_darkest}
+                                    border_color: app.theme_cls.opposite_bg_light
+                                    tick_color: 0,0,0,0.5
+                                    y_ticks_major: 200
+                                    x_ticks_major: 1000
+                                    x_grid: True
+                                    y_grid: True
+                                    xmin: 0
+                                    xmax: 5000
+                                    ymin: -200
+                                    ymax: 800
+                                    draw_border: True
+                                    x_grid_label: True
+                                    y_grid_label: True
+                    MDBoxLayout:
+                        padding: 0, 0, "10dp", 0
+                        size_hint: 0.23, 1
+                        orientation: "vertical"
+                        pos_hint: {"top": 1}
+                        MDList:
+                            size_hint: 1, None
+                            OneLineAvatarListItem:
+                                size_hint: 1, None
+                                text: "Denoised"
+                                CheckboxLeftWidget:
+                                    id: denoise
+                                    #on_active: root.checkbox_show()
+                            OneLineAvatarListItem:
+                                size_hint: 1, None
+                                text: "R Fetus"
+                                CheckboxLeftWidget:
+                                    id: cluster
+                                    size_hint: None, None
+                                    size: "48dp", "48dp"
+                                    #on_active: root.checkbox_show()
+
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            spacing: 10
+                            adaptive_size: True
+                            pos_hint: {"center_x": .5}
+
+                            MDRaisedButton:
+                                elevation: 8
+                                text: '+'
+                                md_bg_color: app.theme_cls.primary_dark
+                                on_release: root.update_zoom(self.text)
+                                pos_hint: {"center_x": .5}
+
+                            MDLabel:
+                                adaptive_size: True
+                                text: str(int(root.zoom)) + 'x'
+                                color: app.theme_cls.opposite_bg_light
+                                pos_hint: {"center_x": .5}
+
+                            MDRaisedButton:
+                                elevation: 8
+                                text: '-'
+                                md_bg_color: app.theme_cls.primary_dark
+                                on_release: root.update_zoom(self.text)
+                                pos_hint: {"center_x": .5}
+
+                        MDBoxLayout:
+                            size_hint: 1, 1
+
+                MDBoxLayout:
+                    adaptive_size: True
+                    padding: 10, 10, 10, 10
+                    pos_hint: {"center_x": .5}
+                    MDRaisedButton:
+                        elevation: 8
+                        text: "STOP" if root.state_connection == 2 or root.state_connection == 4 else 'START'
+                        md_bg_color: app.theme_cls.primary_dark
+                        disabled: True if root.state_connection == 0 else False
+                        pos_hint: {"center_x": .5}
+                        on_release: root.start_reading() if root.state_connection == 1 or root.state_connection == 3 else root.stop_reading()
+
+        MDBackdropFrontLayer:
+            MDBoxLayout:
+                id: front_box
+                padding: "10dp"
+                spacing: "10dp"
+                size_hint: 1, 1
+                orientation: "vertical"
+                pos_hint: {"top": 1}
+
+                MDBoxLayout:
+                    spacing: "10dp"
+                    pos_hint: {"top": 1}
+                    adaptive_height: True
+                    orientation: "vertical"
+
+                    MDRaisedButton:
+                        id:btn_on_off
+                        text: 'Enable'
+                        pos_hint: {"center_x": .5}
+                        elevation: 8
+                        on_release: root.on_off()
+
+                MDBoxLayout:
+                    size_hint: 1, 1
+                    orientation: "vertical"
+
+                    MDList:
+                        id: list_devices
+
+                    MDBoxLayout:
+                        size_hint: 1, 1
