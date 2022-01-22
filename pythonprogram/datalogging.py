@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # #                     sqlid INTEGER,
 # #                     time REAL,
 # #                     raw_abdomen REAL)""")
-# #     c.execute("INSERT INTO fekg VALUES (:sqlid, :time, :raw_abdomen)",{'sqlid': int(start), 
+# #     c.execute("INSERT INTO fekg VALUES (:sqlid, :time, :raw_abdomen)",{'sqlid': int(start),
 #               'time': t, 'raw_abdomen': value})
 # #     c.execute("SELECT time, raw_abdomen FROM fekg WHERE sqlid=:sqlid", {'sqlid': sqlid})
 # print(c.fetchall())
@@ -40,9 +40,11 @@ def matfile(filename, abdname):
     # Load Abdomen
     abd = mat[abdname]
     abd = abd[0]
+    abd = abd.tolist()
     # X axis
     x = mat['x']
     x = x[0]
+    x = x.tolist()
     return x, abd
 
 
@@ -65,6 +67,20 @@ def savecsv(x, y, filename):
     writer = csv.writer(f)
     for i in range(len(x)):
         writer.writerow([x[i], y[i]])
+    f.close()
+
+
+def saveresultcsv(x, y, peak1, peak2, filename):
+    f = open(filename, 'w', newline='')
+    writer = csv.writer(f)
+    p1 = [0] * len(x)
+    p2 = [0] * len(x)
+    for n in peak1:
+        p1[n] = 1
+    for n in peak2:
+        p2[n] = 1
+    for i in range(len(x)):
+        writer.writerow([x[i], y[i], p1[i], p2[i]])
     f.close()
 
 
